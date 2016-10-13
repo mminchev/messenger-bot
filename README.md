@@ -20,7 +20,7 @@ npm install messenger-bot
 See more examples in [the examples folder.](https://github.com/remixz/messenger-bot/tree/master/example)
 
 Run this example in the cloud: [![Nitrous Quickstart](https://nitrous-image-icons.s3.amazonaws.com/quickstart.svg)](https://www.nitrous.io/quickstart)
-* Setup `PAGE_TOKEN`, `VERIFY_TOKEN`, `APP_SECRET` and start the example by `Run > Start Messenger Echo Bot`.
+* Setup `VERIFY_TOKEN`, `APP_SECRET`, for each page add an entry in the map `PAGE_ID` => `PAGE_TOKEN` and start the example by `Run > Start Messenger Echo Bot`.
 * Your Webhook URL is available at `Preview > 3000` in the IDE.
 
 ```js
@@ -28,7 +28,10 @@ const http = require('http')
 const Bot = require('messenger-bot')
 
 let bot = new Bot({
-  token: 'PAGE_TOKEN',
+  tokens: {
+      'PAGE_1_ID': 'PAGE_1_TOKEN',
+      'PAGE_2_ID': 'PAGE_2_TOKEN'
+  },
   verify: 'VERIFY_TOKEN',
   app_secret: 'APP_SECRET'
 })
@@ -65,7 +68,7 @@ Returns a new Bot instance.
 
 `opts` - Object
 
-* `token` - String: Your Page Access Token, found in your App settings. Required.
+* `tokens` - Object: Map of Page IDs and Page Access Tokens, found in your App settings. Required.
 * `verify` - String: A verification token for the first-time setup of your webhook. Optional, but will be required by Facebook when you first set up your webhook.
 * `app_secret` - String: Your App Secret token used for message integrity check. If specified, every POST request  will be tested for spoofing. Optional.
 
@@ -78,7 +81,10 @@ const http = require('http')
 const Bot = require('messenger-bot')
 
 let bot = new Bot({
-  token: 'PAGE_TOKEN',
+  tokens: {
+    'PAGE_1_ID': 'PAGE_1_TOKEN',
+    'PAGE_2_ID': 'PAGE_2_TOKEN'
+  },
   verify: 'VERIFY_TOKEN'
 })
 

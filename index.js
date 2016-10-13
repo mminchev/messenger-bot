@@ -10,15 +10,15 @@ class Bot extends EventEmitter {
     super()
 
     opts = opts || {}
-    if (!opts.token) {
-      throw new Error('Missing page token. See FB documentation for details: https://developers.facebook.com/docs/messenger-platform/quickstart')
+    if (!opts.tokens) {
+      throw new Error('Missing page tokens. See FB documentation for details: https://developers.facebook.com/docs/messenger-platform/quickstart')
     }
-    this.token = opts.token
+    this.tokens = opts.tokens
     this.app_secret = opts.app_secret || false
     this.verify_token = opts.verify || false
   }
 
-  getProfile (id, cb) {
+  getProfile (page_id, id, cb) {
     if (!cb) cb = Function.prototype
 
     request({
@@ -26,7 +26,7 @@ class Bot extends EventEmitter {
       uri: `https://graph.facebook.com/v2.6/${id}`,
       qs: {
         fields: 'first_name,last_name,profile_pic,locale,timezone,gender',
-        access_token: this.token
+        access_token: this.tokens[page_id]
       },
       json: true
     }, (err, res, body) => {
@@ -37,14 +37,14 @@ class Bot extends EventEmitter {
     })
   }
 
-  sendMessage (recipient, payload, cb) {
+  sendMessage (page_id, recipient, payload, cb) {
     if (!cb) cb = Function.prototype
 
     request({
       method: 'POST',
       uri: 'https://graph.facebook.com/v2.6/me/messages',
       qs: {
-        access_token: this.token
+        access_token: this.tokens[page_id]
       },
       json: {
         recipient: { id: recipient },
